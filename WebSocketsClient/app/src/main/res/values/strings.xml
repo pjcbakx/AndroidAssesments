@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">WebSockets</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <array name="sections">
+        <item>Vak A</item>
+        <item>Vak B</item>
+        <item>Vak C</item>
+        <item>Vak D</item>
+        <item>Vak E</item>
+    </array>
+</resources>
