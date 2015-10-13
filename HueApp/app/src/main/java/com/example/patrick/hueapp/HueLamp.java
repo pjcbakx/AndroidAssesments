@@ -57,6 +57,7 @@ public class HueLamp implements Serializable{
     public String imageUrl;
     public String name;
     public boolean isOn;
+    public int id;
     public int brightness;
     public int intensity;
     public int color;

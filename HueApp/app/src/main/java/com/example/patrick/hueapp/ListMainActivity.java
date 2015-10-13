@@ -1,33 +1,20 @@
 package com.example.patrick.hueapp;
 
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 
-public class ListMainActivity extends AppCompatActivity implements LightTask.LightAvailable, AdapterView.OnItemClickListener {
+public class ListMainActivity extends AppCompatActivity implements LightReadTask.LightAvailable, AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private ListView lightsListView = null;
 
@@ -36,6 +23,7 @@ public class ListMainActivity extends AppCompatActivity implements LightTask.Lig
 
     private static final String TAG = "Main";
     private Button addOneLightBtn = null;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +37,11 @@ public class ListMainActivity extends AppCompatActivity implements LightTask.Lig
 
         lightsListView.setOnItemClickListener(this);
 
-        LightTask getRandomUser = new LightTask(this);
-        String[] urls = new String[] { "http://192.168.1.179/api/23d82f45b1c1476a645111275ea73/lights/1" };
-        getRandomUser.execute(urls);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+        LightReadTask getLights = new LightReadTask(this);
+        getLights.execute();
     }
 
     @Override
@@ -88,5 +78,14 @@ public class ListMainActivity extends AppCompatActivity implements LightTask.Lig
         i.putExtra("Lamp", (Serializable)lights.get(position));
 
         startActivity(i);
+    }
+
+    @Override
+    public void onRefresh() {
+        lights.clear();
+        LightReadTask getLights = new LightReadTask(this);
+        getLights.execute();
+        lampAdapter.notifyDataSetChanged();
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

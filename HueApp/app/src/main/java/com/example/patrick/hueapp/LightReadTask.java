@@ -18,7 +18,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 
-public class LightTask extends AsyncTask<String, Void, String>  {
+public class LightReadTask extends AsyncTask<String, Void, String>  {
 
     // Call back
     private LightAvailable listener = null;
@@ -28,7 +28,7 @@ public class LightTask extends AsyncTask<String, Void, String>  {
     private static final String urlString = "http://192.168.1.179/api/23d82f45b1c1476a645111275ea73";
 
     // Constructor, set listener
-    public LightTask(LightAvailable listener) {
+    public LightReadTask(LightAvailable listener) {
         this.listener = listener;
     }
 
@@ -92,11 +92,15 @@ public class LightTask extends AsyncTask<String, Void, String>  {
             jsonObject = new JSONObject(response);
 
             JSONObject lamps = jsonObject.getJSONObject("lights");
+            Log.i("Lights", lamps.toString());
 
-            for(int idx = 1; idx <= lamps.length(); idx++) {
-
-                if(!lamps.isNull(idx + "")) {
-                    JSONObject light = lamps.getJSONObject(idx + "");
+            int lengtIndex = 1;
+            int readIndex = 1;
+            while(lengtIndex <= lamps.length())
+            {
+                if(!lamps.isNull(readIndex + ""))
+                {
+                    JSONObject light = lamps.getJSONObject(readIndex + "");
                     String name = light.getString("name");
                     JSONObject state = light.getJSONObject("state");
                     boolean isOn = state.getBoolean("on");
@@ -111,15 +115,17 @@ public class LightTask extends AsyncTask<String, Void, String>  {
                         sat = state.getInt("sat");
 
                     HueLamp l = new HueLamp();
+                    l.id = readIndex;
                     l.name = name;
                     l.isOn = isOn;
                     l.brightness = bri;
                     l.color = hue;
                     l.intensity = sat;
 
-                    // call back with new person data
                     listener.onLampAvailable(l);
+                    lengtIndex++;
                 }
+                readIndex++;
             }
         } catch( JSONException ex) {
             Log.e(TAG, ex.getLocalizedMessage());

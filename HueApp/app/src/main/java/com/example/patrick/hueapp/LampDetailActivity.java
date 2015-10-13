@@ -6,6 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.ToggleButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +27,17 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
-public class LampDetailActivity extends AppCompatActivity {
+public class LampDetailActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+
+    private HueLamp lamp;
+    private EditText txtName;
+    private ToggleButton btnOn;
+    private SeekBar barHue;
+    private SeekBar barBri;
+    private SeekBar barSat;
+    private Button butSend;
+
+    private boolean tracking = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +45,32 @@ public class LampDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lamp_detail);
 
         Bundle extras = getIntent().getExtras();
-        HueLamp lamp = (HueLamp)extras.getSerializable("Lamp");
+        lamp = (HueLamp)extras.getSerializable("Lamp");
 
-        //new OutputTask().execute();
+        txtName = (EditText) findViewById(R.id.editTextName);
+        btnOn = (ToggleButton) findViewById(R.id.toggleButtonOn);
+        barHue = (SeekBar) findViewById(R.id.seekBarHue);
+        barBri = (SeekBar) findViewById(R.id.seekBarBri);
+        barSat = (SeekBar) findViewById(R.id.seekBarSat);
+        butSend = (Button) findViewById(R.id.buttonSend);
+        butSend.setOnClickListener(this);
+
+        btnOn.setOnClickListener(this);
+        barHue.setOnSeekBarChangeListener(this);
+        barBri.setOnSeekBarChangeListener(this);
+        barSat.setOnSeekBarChangeListener(this);
+
+        txtName.setText(lamp.name);
+        btnOn.setChecked(lamp.isOn);
+        barHue.setProgress(lamp.color);
+        barBri.setProgress(lamp.brightness);
+        barSat.setProgress(lamp.intensity);
+    }
+
+    private void sendToLamp(int id, Boolean on, int bri, int hue, int sat)
+    {
+        LightSendTask task = new LightSendTask();
+        task.execute(Integer.toString(id),on.toString(), Integer.toString(bri), Integer.toString(hue),Integer.toString(sat));
     }
 
     @Override
@@ -56,52 +94,26 @@ public class LampDetailActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-}
-
-class OutputTask extends AsyncTask<Void,Void,String>
-{
 
     @Override
-    protected String doInBackground(Void... params) {
-        InputStream inputStream = null;
-        int responsCode = -1;
+    public void onClick(View v) {
+        sendToLamp(lamp.id,btnOn.isChecked(),barBri.getProgress(), barHue.getProgress(), barSat.getProgress());
+    }
 
-        String response = "";
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if(!tracking)
+            sendToLamp(lamp.id,btnOn.isChecked(),barBri.getProgress(), barHue.getProgress(), barSat.getProgress());
+    }
 
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        tracking = true;
+    }
 
-        try {
-            URL url = new URL("http://192.168.1.179/api/23d82f45b1c1476a645111275ea73/lights/2/state");
-            URLConnection urlConnection = url.openConnection();
-
-            if (!(urlConnection instanceof HttpURLConnection)) {
-                // Url
-                return null;
-            }
-
-            HttpURLConnection httpConnection = (HttpURLConnection) urlConnection;
-            httpConnection.setDoInput(true);
-            httpConnection.setDoOutput(true);
-            httpConnection.setRequestProperty("Content-Type", "application/json");
-            Log.i("Async", "Connect");
-            httpConnection.connect();
-
-            JSONObject param = new JSONObject();
-            param.put("on", "false");
-            DataOutputStream out = new DataOutputStream(httpConnection.getOutputStream());
-            out.writeChars(URLEncoder.encode(param.toString(), "UTF-8"));
-            out.flush();
-            out.close();
-
-        } catch (MalformedURLException e) {
-            Log.e("TAG", e.getLocalizedMessage());
-            return null;
-        } catch (IOException e) {
-            Log.e("TAG", e.getLocalizedMessage());
-            return null;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return "Success";
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        tracking = false;
+        sendToLamp(lamp.id,btnOn.isChecked(),barBri.getProgress(), barHue.getProgress(), barSat.getProgress());
     }
 }
-
