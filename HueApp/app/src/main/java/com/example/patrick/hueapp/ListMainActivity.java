@@ -22,6 +22,10 @@ public class ListMainActivity extends AppCompatActivity implements LightReadTask
     private ListView lightsListView = null;
     private TextView textViewConnect = null;
 
+    private Button buttonAllOn = null;
+    private Button buttonAllOff = null;
+    private Button buttonDisco = null;
+
     private ArrayList<HueLamp> lights = new ArrayList<HueLamp>();
     private LampAdapter lampAdapter = null;
 
@@ -34,7 +38,11 @@ public class ListMainActivity extends AppCompatActivity implements LightReadTask
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_main);
 
+        //Finding layout objects
         textViewConnect = (TextView) findViewById(R.id.textViewConnect);
+        buttonAllOn = (Button) findViewById(R.id.buttonAllOn);
+        buttonAllOff = (Button) findViewById(R.id.buttonAllOff);
+
         lightsListView = (ListView) findViewById(R.id.lightsListView);
         lampAdapter = new LampAdapter(getApplicationContext(),
                 getLayoutInflater(), lights);
@@ -42,10 +50,39 @@ public class ListMainActivity extends AppCompatActivity implements LightReadTask
 
         lightsListView.setOnItemClickListener(this);
 
+        buttonAllOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (HueLamp lamp : lights) {
+                    lamp.isOn = true;
+                    lamp.brightness = 255;
+                    LightSendTask sendTask = new LightSendTask();
+                    sendTask.execute(Integer.toString(lamp.id), "true", Integer.toString(255));
+                }
+                lampAdapter.notifyDataSetChanged();
+            }
+        });
+
+        buttonAllOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (HueLamp lamp : lights) {
+                    lamp.isOn = false;
+                    lamp.brightness = 0;
+                    LightSendTask sendTask = new LightSendTask();
+                    sendTask.execute(Integer.toString(lamp.id), "false", Integer.toString(0));
+                }
+                lampAdapter.notifyDataSetChanged();
+            }
+        });
+
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
 
         textViewConnect.setText("Connecting to bridge....");
+        buttonAllOn.setVisibility(View.GONE);
+        buttonAllOff.setVisibility(View.GONE);
+
         LightReadTask getLights = new LightReadTask(this);
         getLights.execute();
     }
@@ -78,7 +115,9 @@ public class ListMainActivity extends AppCompatActivity implements LightReadTask
             lights.add(lamp);
             lampAdapter.notifyDataSetChanged();
 
-            textViewConnect.setVisibility(View.INVISIBLE);
+            textViewConnect.setVisibility(View.GONE);
+            buttonAllOn.setVisibility(View.VISIBLE);
+            buttonAllOff.setVisibility(View.VISIBLE);
         }
         else
         {
@@ -98,8 +137,11 @@ public class ListMainActivity extends AppCompatActivity implements LightReadTask
     @Override
     public void onRefresh() {
         lights.clear();
+        buttonAllOn.setVisibility(View.GONE);
+        buttonAllOff.setVisibility(View.GONE);
         textViewConnect.setVisibility(View.VISIBLE);
         textViewConnect.setText("Connecting to bridge....");
+
         LightReadTask getLights = new LightReadTask(this);
         getLights.execute();
         lampAdapter.notifyDataSetChanged();

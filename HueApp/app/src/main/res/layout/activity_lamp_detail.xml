@@ -22,6 +22,12 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Color:"
+        android:id="@+id/textViewColor" />
+
     <SeekBar
         android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -31,6 +37,12 @@
         android:layout_marginBottom="10dp"
         android:indeterminate="false" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Brightness:"
+        android:id="@+id/textViewBri" />
+
     <SeekBar
         android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -38,6 +50,12 @@
         android:id="@+id/seekBarBri"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Saturation:"
+        android:id="@+id/textViewSat" />
 
     <SeekBar
         android:layout_width="200dp"
@@ -52,5 +70,6 @@
         android:layout_height="wrap_content"
         android:text="Send to Lamp"
         android:id="@+id/buttonSend"
-        android:clickable="false" />
+        android:clickable="false"
+        android:visibility="gone"/>
 </LinearLayout>

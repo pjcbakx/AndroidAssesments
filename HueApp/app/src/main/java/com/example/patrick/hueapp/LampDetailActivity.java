@@ -37,7 +37,6 @@ public class LampDetailActivity extends AppCompatActivity implements View.OnClic
     private SeekBar barSat;
     private Button butSend;
 
-    private boolean tracking = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +64,17 @@ public class LampDetailActivity extends AppCompatActivity implements View.OnClic
         barHue.setProgress(lamp.color);
         barBri.setProgress(lamp.brightness);
         barSat.setProgress(lamp.intensity);
+
+        Log.i("Bri", Integer.toString(lamp.brightness));
     }
 
     private void sendToLamp(int id, Boolean on, int bri, int hue, int sat)
     {
+        lamp.isOn = on;
+        lamp.brightness = bri;
+        lamp.color = hue;
+        lamp.intensity = sat;
+
         LightSendTask task = new LightSendTask();
         task.execute(Integer.toString(id),on.toString(), Integer.toString(bri), Integer.toString(hue),Integer.toString(sat));
     }
@@ -102,18 +108,15 @@ public class LampDetailActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if(!tracking)
-            sendToLamp(lamp.id,btnOn.isChecked(),barBri.getProgress(), barHue.getProgress(), barSat.getProgress());
     }
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-        tracking = true;
+
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        tracking = false;
         sendToLamp(lamp.id,btnOn.isChecked(),barBri.getProgress(), barHue.getProgress(), barSat.getProgress());
     }
 }
