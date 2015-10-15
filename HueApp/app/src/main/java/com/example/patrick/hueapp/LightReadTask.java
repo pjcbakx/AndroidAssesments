@@ -85,50 +85,56 @@ public class LightReadTask extends AsyncTask<String, Void, String>  {
 
     protected void onPostExecute(String response) {
 
-        JSONObject jsonObject;
+        if(response != null) {
 
-        try {
-            // Top level json object
-            jsonObject = new JSONObject(response);
+            JSONObject jsonObject;
 
-            JSONObject lamps = jsonObject.getJSONObject("lights");
-            Log.i("Lights", lamps.toString());
+            try {
+                // Top level json object
+                jsonObject = new JSONObject(response);
 
-            int lengtIndex = 1;
-            int readIndex = 1;
-            while(lengtIndex <= lamps.length())
-            {
-                if(!lamps.isNull(readIndex + ""))
-                {
-                    JSONObject light = lamps.getJSONObject(readIndex + "");
-                    String name = light.getString("name");
-                    JSONObject state = light.getJSONObject("state");
-                    boolean isOn = state.getBoolean("on");
-                    int bri = state.getInt("bri");
+                JSONObject lamps = jsonObject.getJSONObject("lights");
+                Log.i("Lights", lamps.toString());
 
-                    int hue = -1;
-                    int sat = -1;
+                int lengtIndex = 1;
+                int readIndex = 1;
+                while (lengtIndex <= lamps.length()) {
+                    if (!lamps.isNull(readIndex + "")) {
+                        JSONObject light = lamps.getJSONObject(readIndex + "");
+                        String name = light.getString("name");
+                        JSONObject state = light.getJSONObject("state");
+                        boolean isOn = state.getBoolean("on");
+                        int bri = state.getInt("bri");
 
-                    if (!state.isNull("hue"))
-                        hue = state.getInt("hue");
-                    if (!state.isNull("sat"))
-                        sat = state.getInt("sat");
+                        int hue = -1;
+                        int sat = -1;
 
-                    HueLamp l = new HueLamp();
-                    l.id = readIndex;
-                    l.name = name;
-                    l.isOn = isOn;
-                    l.brightness = bri;
-                    l.color = hue;
-                    l.intensity = sat;
+                        if (!state.isNull("hue"))
+                            hue = state.getInt("hue");
+                        if (!state.isNull("sat"))
+                            sat = state.getInt("sat");
 
-                    listener.onLampAvailable(l);
-                    lengtIndex++;
+                        HueLamp l = new HueLamp();
+                        l.id = readIndex;
+                        l.name = name;
+                        l.isOn = isOn;
+                        l.brightness = bri;
+                        l.color = hue;
+                        l.intensity = sat;
+
+                        listener.onLampAvailable(l, true);
+                        lengtIndex++;
+                    }
+                    readIndex++;
                 }
-                readIndex++;
+            } catch (JSONException ex) {
+                Log.e(TAG, ex.getLocalizedMessage());
             }
-        } catch( JSONException ex) {
-            Log.e(TAG, ex.getLocalizedMessage());
+        }
+        else
+        {
+            Log.i(TAG,"No connection");
+            listener.onLampAvailable(null, false);
         }
     }
 
@@ -163,6 +169,6 @@ public class LightReadTask extends AsyncTask<String, Void, String>  {
 
     // Call back interface
     public interface LightAvailable {
-        void onLampAvailable(HueLamp person);
+        void onLampAvailable(HueLamp person, boolean connected);
     }
 }

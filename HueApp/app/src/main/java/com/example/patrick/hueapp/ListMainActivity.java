@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 public class ListMainActivity extends AppCompatActivity implements LightReadTask.LightAvailable, AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private ListView lightsListView = null;
+    private TextView textViewConnect = null;
 
     private ArrayList<HueLamp> lights = new ArrayList<HueLamp>();
     private LampAdapter lampAdapter = null;
@@ -30,6 +34,7 @@ public class ListMainActivity extends AppCompatActivity implements LightReadTask
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_main);
 
+        textViewConnect = (TextView) findViewById(R.id.textViewConnect);
         lightsListView = (ListView) findViewById(R.id.lightsListView);
         lampAdapter = new LampAdapter(getApplicationContext(),
                 getLayoutInflater(), lights);
@@ -40,6 +45,7 @@ public class ListMainActivity extends AppCompatActivity implements LightReadTask
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
 
+        textViewConnect.setText("Connecting to bridge....");
         LightReadTask getLights = new LightReadTask(this);
         getLights.execute();
     }
@@ -67,15 +73,24 @@ public class ListMainActivity extends AppCompatActivity implements LightReadTask
     }
 
     @Override
-    public void onLampAvailable(HueLamp lamp) {
-        lights.add(lamp);
-        lampAdapter.notifyDataSetChanged();
+    public void onLampAvailable(HueLamp lamp, boolean connected) {
+        if(connected) {
+            lights.add(lamp);
+            lampAdapter.notifyDataSetChanged();
+
+            textViewConnect.setVisibility(View.INVISIBLE);
+        }
+        else
+        {
+            textViewConnect.setVisibility(View.VISIBLE);
+            textViewConnect.setText("Connection to bridge failed");
+        }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent i = new Intent(getApplicationContext(), LampDetailActivity.class);
-        i.putExtra("Lamp", (Serializable)lights.get(position));
+        i.putExtra("Lamp", (Serializable) lights.get(position));
 
         startActivity(i);
     }
@@ -83,6 +98,8 @@ public class ListMainActivity extends AppCompatActivity implements LightReadTask
     @Override
     public void onRefresh() {
         lights.clear();
+        textViewConnect.setVisibility(View.VISIBLE);
+        textViewConnect.setText("Connecting to bridge....");
         LightReadTask getLights = new LightReadTask(this);
         getLights.execute();
         lampAdapter.notifyDataSetChanged();
