@@ -17,6 +17,16 @@ app.get('/', function(req, res) {
 // Socket io listeners
 io.on('connection', function(socket) {
 	
+	setInterval(function(){
+        socket.volatile.emit('heartbeat', {'date': new Date()});
+    }, 30000);
+	
+	if socket.get('MGeText', function(text)) == "portrait" {
+	//	socket.broadcast.emit('bgcolor', { 0,255,0,255} );
+	} else {
+	//	socket.broadcast.emit('bgcolor', { 255,0,0,255} );
+	}
+	
 	// Past achtergrondkleur aan
 	socket.on('MSetBG', function(red, green, blue, alpha){
         socket.broadcast.emit('bgcolor', {
@@ -26,9 +36,9 @@ io.on('connection', function(socket) {
         	'a':alpha
         });
 	});
-
+	
     // Verstuurd text naar alle apparaten
-    socket.on('MSendText', function(text){
+    socket.get('MGeText', function(text){
     socket.broadcast.emit('sendtext', {
             'text':text
 		});
