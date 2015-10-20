@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Serverpanel</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<!-- Optional Bootstrap theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
+
+<script>
+  var socket = io();
+</script>
+
+<script type="text/javascript">  
+$(document).ready(function(){ 
+
+    $("#buttons .btn").click(function(button){
+        var bid = button.target.id
+        switch(bid) {
+
+            case 'redButton':
+                socket.emit('MSetBG', 255, 0, 0, 255)
+                $( ".demo-content" ).css( "background", "#ff0000" );
+                break
+
+            case 'yellowButton':
+                socket.emit('MSetBG', 255, 255, 0, 255)
+                $( ".demo-content" ).css( "background", "#ffff00" );
+                break
+
+            default:
+                console.log(bid)
+                break
+        }
+    });
+});   
+</script>
+
+<style type="text/css">
+    .demo-content{
+        padding: 15px;
+        font-size: 30px;
+        min-height: 300px;
+        background: #dbdfe5;
+        margin-bottom: 10px;
+    }
+    .demo-content.bg-alt{
+        background: #abb1b8;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="col-sm-12">
+            <div id="buttons" class="">
+                <form action="#" autocomplete="off">
+                    <div class="demo-content">Serverpanel
+                        <hr>
+                        <div class="btn-group btn-group-justified">
+                            <a href="#" class="btn btn-primary" id="redButton">Red</a>
+                            <a href="#" class="btn btn-primary" id="yellowButton">Yellow</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+     </div>
+</body>
+</html>
