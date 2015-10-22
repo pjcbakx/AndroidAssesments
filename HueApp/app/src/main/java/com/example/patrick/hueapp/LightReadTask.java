@@ -25,7 +25,9 @@ public class LightReadTask extends AsyncTask<String, Void, String>  {
 
     // Static's
     private static final String TAG = "RandomUserTask";
-    private static final String urlString = "http://192.168.1.179/api/23d82f45b1c1476a645111275ea73";
+    private static String urlString = "";
+    private static final String userId = "3f42aff116cdeb1770120252548eb4b";
+    private static final String hueIp = "http://192.168.1.179/api/";
 
     // Constructor, set listener
     public LightReadTask(LightAvailable listener) {
@@ -39,6 +41,8 @@ public class LightReadTask extends AsyncTask<String, Void, String>  {
         int responsCode = -1;
 
         String response = "";
+
+        urlString = hueIp + userId;
 
         for(String url : params) {
             Log.i(TAG, url);

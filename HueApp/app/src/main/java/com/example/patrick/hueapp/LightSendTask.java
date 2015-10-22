@@ -23,7 +23,9 @@ import java.net.URLEncoder;
  */
 public class LightSendTask extends AsyncTask<String,Void,String> {
     private static final String TAG = "LightSendTask";
-    private static String baseUrlString = "http://192.168.1.179/api/23d82f45b1c1476a645111275ea73/lights/";
+    private static String baseUrlString = "";
+    private static final String userId = "3f42aff116cdeb1770120252548eb4b";
+    private static final String hueIp = "http://192.168.1.179/api/";
     private String lampId;
 
     @Override
@@ -38,7 +40,7 @@ public class LightSendTask extends AsyncTask<String,Void,String> {
 
         String response = "";
 
-
+        baseUrlString = hueIp + userId + "/lights/";
 
         for(int i = 0; i < params.length; i++)
         {
