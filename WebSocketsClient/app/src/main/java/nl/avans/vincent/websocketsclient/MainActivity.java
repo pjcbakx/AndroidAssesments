@@ -21,18 +21,6 @@ public class MainActivity extends AppCompatActivity implements WebSocket.OnLight
 
         rootView = findViewById(R.id.main_root);
 
-        OrientationEventListener listener = new OrientationEventListener(this) {
-            @Override
-            public void onOrientationChanged(int orientation) {
-                Log.i(TAG, ">>>>>" + orientation);
-                if (orientation >= 0 && orientation <= 90) Log.i(TAG, "Normal");
-                if (orientation >= 90 && orientation <= 180) Log.i(TAG, "Left");
-                if (orientation >= 180 && orientation <= 270) Log.i(TAG, "Upside down");
-                if (orientation >= 270 && orientation <= 380) Log.i(TAG, "Right");
-            }
-        };
-        listener.enable();
-
         new WebSocket(this).connect();
     }
 
