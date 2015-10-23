@@ -12,15 +12,10 @@ http.listen(port, function() {
 	console.log('Server op poort %d', port)
 });
 
-// Serverpanel
-app.get('/', function(req, res) {
-	res.sendFile(__dirname + '/website/index.html')
-});
-
 // Socket io listeners
 io.on('connection', function(socket) {
 	
-	//Als een device verbinding maakt.
+	// Als een device verbinding maakt.
 	++numDevices;
 	console.log('Conntected devices: %d', numDevices)
 	
@@ -37,11 +32,13 @@ io.on('connection', function(socket) {
         socket.volatile.emit('heartbeat', {'date': new Date()});
     }, 30000);
 			
-	//Orientation
-
+	// Orientation
 	socket.on('potrait', function(text) {
 		console.log('Potrait')
-		--numLandscape;
+		if(numLandscape > 0)
+		{
+			--numLandscape;
+		}
 		console.log('Aantal landscape: %d',numLandscape)
 		if (numLandscape == 0) {
 		  io.emit('bgcolor', {
@@ -64,27 +61,14 @@ io.on('connection', function(socket) {
         	'a':255
 		});
 	});
-
-	// Past achtergrondkleur aan
-	socket.on('MSetBG', function(red, green, blue, alpha){
-        socket.broadcast.emit('bgcolor', {
-        	'r':red, 
-        	'g':green, 
-        	'b':blue, 
-        	'a':alpha
-        });
-	});
-
-   // Verstuurd text naar alle apparaten
-   socket.on('MGeText', function(text){
-     socket.broadcast.emit('sendtext', {
-            'text':text
-		});
-   });
    
    // Als een device de verbinding verbreekt.
    socket.on('disconnect', function() {
 		--numDevices; 
+		if(numDevices == 0)
+		{
+			numLandscape = 0;
+		}
 		console.log('Conntected devices: %d', numDevices)
    });
 	
