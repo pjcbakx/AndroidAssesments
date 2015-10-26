@@ -19,11 +19,23 @@ public class AirportsDatabase extends SQLiteAssetHelper {
 
 
     // Hier de CRUD methoden
-    public Cursor getAirports() {
+    public Cursor getAirports(String country) {
         SQLiteDatabase db = getReadableDatabase();
 
         //String query = "SELECT icao, name FROM airports WHERE iso_country = \"NL\"";
-        String query = "SELECT * FROM airports WHERE iso_country = \"NL\"";
+        //String query = "SELECT * FROM airports WHERE iso_country = \"NL\"";
+        String query = "SELECT * FROM airports WHERE iso_country = \"" + country + "\"";
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        db.close();
+        return c;
+    }
+
+    public Cursor getCountries() {
+        SQLiteDatabase db = getReadableDatabase();
+
+        //String query = "SELECT icao, name FROM airports WHERE iso_country = \"NL\"";
+        String query = "SELECT iso_country FROM airports";
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
         db.close();

@@ -22,13 +22,6 @@
             <TextView android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:padding="7dp"
-                android:text="Name:"
-                android:textStyle="bold"/>
-
-            <TextView android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
                 android:padding="5dp"
                 android:text="ICAO:"
                 android:textStyle="bold"/>
@@ -54,6 +47,13 @@
                 android:text="City:"
                 android:textStyle="bold"/>
 
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:padding="7dp"
+                android:text="Name:"
+                android:textStyle="bold"/>
+
 
         </LinearLayout>
 
@@ -61,14 +61,7 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="..."
-                android:id="@+id/txtName" />
+            android:padding="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -97,6 +90,13 @@
                 android:padding="5dp"
                 android:text="..."
                 android:id="@+id/txtMunicipality" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="..."
+                android:id="@+id/txtName" />
         </LinearLayout>
     </LinearLayout>
 

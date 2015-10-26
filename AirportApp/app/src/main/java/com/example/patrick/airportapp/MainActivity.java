@@ -11,31 +11,90 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
 
     private final static String TAG = "MainActivity";
     private AirportAdapter airportCursorAdapter;
     private ListView airportListView;
+    private Spinner countrySpinner;
+    private  AirportsDatabase adb;
+    private AirportAdapter adapter;
 
-    ArrayList list;
+    ArrayList airportList;
+    ArrayList countryList;
+
+    String startCountry = "NL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        list = new ArrayList<String>();
+        airportList = new ArrayList<Airport>();
+        countryList = new ArrayList<String>();
+
+        countrySpinner = (Spinner) findViewById(R.id.spinner);
 
         // Inflate listview
         airportListView = (ListView) findViewById(R.id.airPortListView);
         airportListView.setOnItemClickListener(this);
 
-        AirportsDatabase adb = new AirportsDatabase(this);
-        Cursor cursor = adb.getAirports();
+        adb = new AirportsDatabase(this);
+
+        Cursor cursor = adb.getCountries();
+
+        cursor.moveToFirst();
+        while( cursor.moveToNext() ) {
+
+            String str = cursor.getString(cursor.getColumnIndex("iso_country"));
+
+            if(!countryList.contains(str))
+                countryList.add(str);
+
+            //Log.i(TAG, str);
+        }
+        Collections.sort(countryList, String.CASE_INSENSITIVE_ORDER);
+
+        ArrayAdapter<String> stringArrayAdapter=
+                new ArrayAdapter<String>(getApplicationContext(),
+                        android.R.layout.simple_spinner_item,
+                        countryList);
+        countrySpinner.setAdapter(stringArrayAdapter);
+        countrySpinner.setSelection(countryList.indexOf(startCountry), false);
+        countrySpinner.setOnItemSelectedListener(this);
+        //Collections.sort(airportList, String.CASE_INSENSITIVE_ORDER);
+
+        adapter = new AirportAdapter(getApplicationContext(), getLayoutInflater(),airportList);
+        airportListView.setAdapter(adapter);
+        fillAirportList(startCountry);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void fillCountryList()
+    {
+        Cursor cursor = adb.getCountries();
+
+        cursor.moveToFirst();
+        while( cursor.moveToNext() ) {
+
+            String str = cursor.getString(cursor.getColumnIndex("iso_country"));
+
+            if(!countryList.contains(str))
+                countryList.add(str);
+
+            //Log.i(TAG, str);
+        }
+    }
+
+    private void fillAirportList(String name)
+    {
+        Cursor cursor = adb.getAirports(name);
 
         cursor.moveToFirst();
         while( cursor.moveToNext() ) {
@@ -50,21 +109,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             airport.iso_country = cursor.getString(cursor.getColumnIndex("iso_country"));
             airport.municipality = cursor.getString(cursor.getColumnIndex("municipality"));
 
-            list.add(airport);
+            airportList.add(airport);
             //Log.i(TAG, str);
         }
-        Log.i(TAG, "count: " + list.size());
-
-        AirportAdapter adapter = new AirportAdapter(getApplicationContext(), getLayoutInflater(),list);
-        airportListView.setAdapter(adapter);
-
-        adapter.notifyDataSetChanged();
-    }
-
-
-    private void fillAirportList()
-    {
-
     }
 
     @Override
@@ -92,8 +139,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent i = new Intent(getApplicationContext(),AirportDetailActivity.class);
-        i.putExtra("Airport", (Serializable) list.get(position));
+        i.putExtra("Airport", (Serializable) airportList.get(position));
 
         startActivity(i);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String name = (String) countryList.get(position);
+        Log.i("Test", name);
+        airportList.clear();
+        fillAirportList(name);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

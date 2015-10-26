@@ -52,6 +52,7 @@ public class AirportAdapter extends BaseAdapter {
 
             viewholder = new ViewHolder();
             viewholder.airporttname = (TextView) convertView.findViewById(R.id.airportname);
+            viewholder.icao = (TextView)convertView.findViewById(R.id.Icao);
 
             convertView.setTag(viewholder);
         }
@@ -63,11 +64,13 @@ public class AirportAdapter extends BaseAdapter {
         //Airport airport = (Airport) airportArrayList.get(position);
         Airport airport = (Airport)airportArrayList.get(position);
         viewholder.airporttname.setText(airport.name);
+        viewholder.icao.setText(airport.icao);
 
         return convertView;
     }
 
     private static class ViewHolder {
         public TextView airporttname;
+        public TextView icao;
     }
 }
