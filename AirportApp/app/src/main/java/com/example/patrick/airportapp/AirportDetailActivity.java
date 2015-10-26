@@ -2,15 +2,26 @@ package com.example.patrick.airportapp;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class AirportDetailActivity extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private Airport airport;
+
+    private TextView txtName;
+    private TextView txtIcao;
+    private TextView txtElevation;
+    private TextView txtCountry;
+    private TextView txtMunicipality;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,9 +29,40 @@ public class AirportDetailActivity extends FragmentActivity {
         setContentView(R.layout.activity_airport_detail);
         setUpMapIfNeeded();
 
+        txtName = (TextView) findViewById(R.id.txtName);
+        txtIcao = (TextView) findViewById(R.id.txtICAO);
+        txtElevation = (TextView) findViewById(R.id.txtElevation);
+        txtCountry = (TextView) findViewById(R.id.txtCountry);
+        txtMunicipality = (TextView) findViewById(R.id.txtMunicipality);
+
+
         Bundle extras = getIntent().getExtras();
-        String name = (String)extras.getSerializable("Airport");
-    }
+        airport = (Airport)extras.getSerializable("Airport");
+
+        txtName.setText(airport.name);
+        txtIcao.setText(airport.icao);
+        txtElevation.setText(Integer.toString(airport.elevation));
+        txtCountry.setText(airport.iso_country);
+        txtMunicipality.setText(airport.municipality);
+
+        mMap.clear();
+
+        LatLng positionAmsterdam = new LatLng(52.3086013794, 4.76388978958);
+        mMap.addMarker(new MarkerOptions().position(positionAmsterdam).title("Amsterdam"));
+
+
+        LatLng position = new LatLng(airport.latitude, airport.longitude);
+        Log.i("Detail", "Lat:" + airport.latitude + " , Long:" + airport.longitude);
+        mMap.addMarker(new MarkerOptions().position(position).title(airport.name));
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 6.0f));
+
+        PolylineOptions route = new PolylineOptions();
+        route.add(positionAmsterdam);
+        route.add(position);
+
+        mMap.addPolyline(route);
+   }
 
     @Override
     protected void onResume() {

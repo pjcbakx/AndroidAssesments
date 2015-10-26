@@ -61,8 +61,8 @@ public class AirportAdapter extends BaseAdapter {
         }
 
         //Airport airport = (Airport) airportArrayList.get(position);
-        String airport = (String)airportArrayList.get(position);
-        viewholder.airporttname.setText(airport);
+        Airport airport = (Airport)airportArrayList.get(position);
+        viewholder.airporttname.setText(airport.name);
 
         return convertView;
     }

@@ -39,9 +39,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         cursor.moveToFirst();
         while( cursor.moveToNext() ) {
-            String str = cursor.getString(cursor.getColumnIndex("name"));
-            list.add(str);
-            Log.i(TAG, str);
+
+            Airport airport = new Airport();
+
+            airport.name = cursor.getString(cursor.getColumnIndex("name"));
+            airport.icao = cursor.getString(cursor.getColumnIndex("icao"));
+            airport.longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
+            airport.latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
+            airport.elevation = cursor.getInt(cursor.getColumnIndex("elevation"));
+            airport.iso_country = cursor.getString(cursor.getColumnIndex("iso_country"));
+            airport.municipality = cursor.getString(cursor.getColumnIndex("municipality"));
+
+            list.add(airport);
+            //Log.i(TAG, str);
         }
         Log.i(TAG, "count: " + list.size());
 
@@ -49,6 +59,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         airportListView.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
+    }
+
+
+    private void fillAirportList()
+    {
+
     }
 
     @Override
