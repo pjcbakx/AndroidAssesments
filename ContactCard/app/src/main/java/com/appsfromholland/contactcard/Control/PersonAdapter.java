@@ -1,4 +1,4 @@
-package com.appsfromholland.contactcard.Controller;
+package com.appsfromholland.contactcard.Control;
 
 import android.content.Context;
 import android.util.Log;
@@ -15,7 +15,7 @@ import com.appsfromholland.contactcard.R;
 import java.util.ArrayList;
 
 /**
- * Created by dkroeske on 8/29/15.
+ * Created by Vincent on 28-9-2015.
  */
 public class PersonAdapter extends BaseAdapter {
 
@@ -53,25 +53,20 @@ public class PersonAdapter extends BaseAdapter {
 
         ViewHolder viewHolder;
 
-        // Create new of gebruik een al bestaande (recycled by Android)
         if(convertView == null) {
 
-            //
             convertView = mInflator.inflate(R.layout.listview_row, null);
 
-            //
             viewHolder = new ViewHolder();
             viewHolder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
             viewHolder.name = (TextView) convertView.findViewById(R.id.name);
             viewHolder.email = (TextView) convertView.findViewById(R.id.email);
 
-            //
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        // En nu de viewHolder invullen met de juiste persons
         Person person = (Person) mPersonArrayList.get(position);
         viewHolder.imageView.setImageBitmap(person.image);
         viewHolder.name.setText(person.firstname);
@@ -80,7 +75,6 @@ public class PersonAdapter extends BaseAdapter {
         return convertView;
     }
 
-    // Holds all data to the view. Wordt evt. gerecycled door Android
     private static class ViewHolder {
         public ImageView imageView;
         public TextView name;

@@ -65,10 +65,6 @@ public class WebSocket {
         return socket;
     }
 
-    public int getColor() {
-        return color;
-    }
-
     private class colorBroadcastListener implements Emitter.Listener {
         @Override
         public void call(Object... args) {
@@ -97,7 +93,6 @@ public class WebSocket {
     }
 
     private void runOnMainThread(Runnable runnable) {
-        // Create handler for the Main Looper and execute code on Main Looper
         Handler handler = new android.os.Handler(Looper.getMainLooper());
         handler.post(runnable);
     }

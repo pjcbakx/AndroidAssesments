@@ -11,10 +11,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.database.Cursor;
 
-import com.appsfromholland.contactcard.Controller.ContactCardDatabase;
-import com.appsfromholland.contactcard.Controller.JSONData;
+import com.appsfromholland.contactcard.Control.ContactCardDatabase;
+import com.appsfromholland.contactcard.Control.JSONData;
 import com.appsfromholland.contactcard.Model.Person;
-import com.appsfromholland.contactcard.Controller.PersonAdapter;
+import com.appsfromholland.contactcard.Control.PersonAdapter;
 import com.appsfromholland.contactcard.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -36,18 +36,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Imageloader
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.init(ImageLoaderConfiguration.createDefault(this));
 
         for (int i = 0; i < 10; i++) {
-            // Haalt JSON file op van randomuser.me/api
             jsonData = new JSONData(this, imageLoader);
             String[] urls = new String[]{"https://randomuser.me/api/"};
             jsonData.execute(urls);
         }
 
-        // Leest het database bestand contactcard.db uit.
         ccdb = new ContactCardDatabase(this);
         Cursor cursor = ccdb.getCards();
 
@@ -94,37 +91,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         }
 
-        //
         mPersonListView = (ListView) findViewById(R.id.personListView);
-
-        // Koppel list aan
-        mPersonAdapter = new PersonAdapter(this,
-                getLayoutInflater(),
-                mPersonList);
+        mPersonAdapter = new PersonAdapter(this, getLayoutInflater(), mPersonList);
         mPersonListView.setAdapter(mPersonAdapter);
-
-        // Activate adapter, kan dan ook in een button, of network update
         mPersonAdapter.notifyDataSetChanged();
-
-        // Enable listener
         mPersonListView.setOnItemClickListener(this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -132,8 +115,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         return super.onOptionsItemSelected(item);
     }
 
-    //
-    // Click on selected item in list
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -155,15 +136,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         i.putExtra("CELL", person.cell);
         i.putExtra("NATIONALITY", person.nationality);
         startActivity(i);
-
     }
 
     @Override
     public void onRandomUserAvailable(Person person) {
         mPersonList.add(person);
-        //ccdb.addCard(person);
+        //ccdb.addCard(person); // Voor het wegschrijven naar database
         mPersonAdapter.notifyDataSetChanged();
-
     }
 
 }

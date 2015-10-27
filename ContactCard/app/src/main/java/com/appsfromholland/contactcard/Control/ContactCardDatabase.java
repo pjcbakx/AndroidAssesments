@@ -1,4 +1,4 @@
-package com.appsfromholland.contactcard.Controller;
+package com.appsfromholland.contactcard.Control;
 
 import android.content.ContentValues;
 import android.content.Context;

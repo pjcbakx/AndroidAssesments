@@ -1,4 +1,4 @@
-package com.appsfromholland.contactcard.Controller;
+package com.appsfromholland.contactcard.Control;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -26,17 +26,14 @@ import java.net.URLConnection;
  */
 public class JSONData extends AsyncTask<String, Void, String> {
 
-    // Call back
     private OnRandomUserAvailable listener = null;
 
-    // Static's
     private static final String TAG = "RandomUserTask";
     private static final String urlString = "https://randomuser.me/api/";
     public static Person p;
 
     public ImageLoader imageLoader;
 
-    // Constructor, set listener
     public JSONData(OnRandomUserAvailable listener, ImageLoader imageLoader) {
         this.listener = listener;
         this.imageLoader = imageLoader;
@@ -73,7 +70,6 @@ public class JSONData extends AsyncTask<String, Void, String> {
             if (responsCode == HttpURLConnection.HTTP_OK) {
                 inputStream = httpConnection.getInputStream();
                 response = getStringFromInputStream(inputStream);
-                //Log.i(TAG, response);
             }
         } catch (MalformedURLException e) {
             Log.e("TAG", e.getLocalizedMessage());
@@ -96,17 +92,13 @@ public class JSONData extends AsyncTask<String, Void, String> {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        // parse JSON and inform caller
         JSONObject jsonObject;
 
         try {
-            // Top level json object
             jsonObject = new JSONObject(response);
 
-            // Get all users and start looping
             JSONArray users = jsonObject.getJSONArray("results");
             for(int idx = 0; idx < users.length(); idx++) {
-                // array level objects and get user
                 JSONObject array = users.getJSONObject(idx);
                 JSONObject userObj = array.getJSONObject("user");
                 JSONObject nameObj = userObj.getJSONObject("name");
@@ -151,8 +143,6 @@ public class JSONData extends AsyncTask<String, Void, String> {
                 p.cell = cell;
                 p.nationality = nationality;
 
-                // call back with new person data
-
                 listener.onRandomUserAvailable(p);
 
             }
@@ -161,10 +151,6 @@ public class JSONData extends AsyncTask<String, Void, String> {
         }
     }
 
-
-    //
-    // convert InputStream to String
-    //
     private static String getStringFromInputStream(InputStream is) {
 
         BufferedReader br = null;
@@ -193,13 +179,8 @@ public class JSONData extends AsyncTask<String, Void, String> {
         return sb.toString();
     }
 
-    // Call back interface
     public interface OnRandomUserAvailable {
         void onRandomUserAvailable(Person person);
-    }
-
-    public Person getPerson() {
-        return p;
     }
 
 }
