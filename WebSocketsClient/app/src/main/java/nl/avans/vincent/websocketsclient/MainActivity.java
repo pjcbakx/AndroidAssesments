@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements WebSocket.OnLight
 
             webSocket.getSocket().emit("potrait");
         }
-        if (getRotation() == 3) {
+        if (getRotation() == 1 || getRotation() == 3) {
             TextView tvMessage = (TextView) findViewById(R.id.text_message);
             tvMessage.setText("NIET OK!");
 
