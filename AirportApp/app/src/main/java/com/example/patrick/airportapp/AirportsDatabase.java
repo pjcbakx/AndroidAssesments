@@ -31,6 +31,18 @@ public class AirportsDatabase extends SQLiteAssetHelper {
         return c;
     }
 
+    public Cursor getAirports() {
+        SQLiteDatabase db = getReadableDatabase();
+
+        //String query = "SELECT icao, name FROM airports WHERE iso_country = \"NL\"";
+        //String query = "SELECT * FROM airports WHERE iso_country = \"NL\"";
+        String query = "SELECT * FROM airports";
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        db.close();
+        return c;
+    }
+
     public Cursor getCountries() {
         SQLiteDatabase db = getReadableDatabase();
 

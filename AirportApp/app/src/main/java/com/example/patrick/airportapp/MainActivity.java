@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
 
@@ -63,16 +64,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         ArrayAdapter<String> stringArrayAdapter=
                 new ArrayAdapter<String>(getApplicationContext(),
-                        android.R.layout.simple_spinner_item,
+                        android.R.layout.simple_spinner_dropdown_item,
                         countryList);
         countrySpinner.setAdapter(stringArrayAdapter);
         countrySpinner.setSelection(countryList.indexOf(startCountry), false);
         countrySpinner.setOnItemSelectedListener(this);
-        //Collections.sort(airportList, String.CASE_INSENSITIVE_ORDER);
 
         adapter = new AirportAdapter(getApplicationContext(), getLayoutInflater(),airportList);
         airportListView.setAdapter(adapter);
         fillAirportList(startCountry);
+
+        Collections.sort(airportList, new Comparator<Airport>() {
+            @Override
+            public int compare(Airport lhs, Airport rhs) {
+                return lhs.name.compareTo(rhs.name);
+            }
+        });
+
         adapter.notifyDataSetChanged();
     }
 
@@ -92,16 +100,29 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    private void fillAirportList(String name)
+    private void fillAirportList(String country)
     {
-        Cursor cursor = adb.getAirports(name);
+        Cursor cursor = adb.getAirports(country);
 
         cursor.moveToFirst();
-        while( cursor.moveToNext() ) {
+        Airport airport = new Airport();
 
-            Airport airport = new Airport();
+        airport.name = cursor.getString(cursor.getColumnIndex("name"));;
+        airport.icao = cursor.getString(cursor.getColumnIndex("icao"));
+        airport.longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
+        airport.latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
+        airport.elevation = cursor.getInt(cursor.getColumnIndex("elevation"));
+        airport.iso_country = cursor.getString(cursor.getColumnIndex("iso_country"));
+        airport.municipality = cursor.getString(cursor.getColumnIndex("municipality"));
 
-            airport.name = cursor.getString(cursor.getColumnIndex("name"));
+        airportList.add(airport);
+
+        while( cursor.moveToNext()) {
+
+            airport = new Airport();
+
+            String name = (String) cursor.getString(cursor.getColumnIndex("name"));
+            airport.name = name;
             airport.icao = cursor.getString(cursor.getColumnIndex("icao"));
             airport.longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
             airport.latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
@@ -150,6 +171,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Log.i("Test", name);
         airportList.clear();
         fillAirportList(name);
+
+        Collections.sort(airportList, new Comparator<Airport>() {
+            @Override
+            public int compare(Airport lhs, Airport rhs) {
+                return lhs.name.compareTo(rhs.name);
+            }
+        });
+
         adapter.notifyDataSetChanged();
     }
 
