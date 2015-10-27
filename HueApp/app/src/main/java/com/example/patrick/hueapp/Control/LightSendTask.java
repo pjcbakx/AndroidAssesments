@@ -1,4 +1,4 @@
-package com.example.patrick.hueapp;
+package com.example.patrick.hueapp.Control;
 
 import android.os.AsyncTask;
 import android.util.Log;

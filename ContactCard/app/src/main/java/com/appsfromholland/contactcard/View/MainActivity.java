@@ -1,4 +1,4 @@
-package com.appsfromholland.contactcard;
+package com.appsfromholland.contactcard.View;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,6 +11,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.database.Cursor;
 
+import com.appsfromholland.contactcard.Controller.ContactCardDatabase;
+import com.appsfromholland.contactcard.Controller.JSONData;
+import com.appsfromholland.contactcard.Model.Person;
+import com.appsfromholland.contactcard.Controller.PersonAdapter;
+import com.appsfromholland.contactcard.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 

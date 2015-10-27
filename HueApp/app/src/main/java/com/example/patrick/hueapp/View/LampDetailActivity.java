@@ -1,6 +1,5 @@
-package com.example.patrick.hueapp;
+package com.example.patrick.hueapp.View;
 
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,20 +11,9 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
+import com.example.patrick.hueapp.Control.LightSendTask;
+import com.example.patrick.hueapp.Model.HueLamp;
+import com.example.patrick.hueapp.R;
 
 public class LampDetailActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 

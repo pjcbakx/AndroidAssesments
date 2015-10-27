@@ -1,4 +1,4 @@
-package com.appsfromholland.contactcard;
+package com.appsfromholland.contactcard.Controller;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.appsfromholland.contactcard.Model.Person;
+import com.appsfromholland.contactcard.R;
 
 import java.util.ArrayList;
 

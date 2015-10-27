@@ -1,4 +1,4 @@
-package com.example.patrick.airportapp;
+package com.example.patrick.airportapp.Control;
 
 
 import android.content.Context;
@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.patrick.airportapp.Model.Airport;
+import com.example.patrick.airportapp.R;
 
 import java.util.ArrayList;
 

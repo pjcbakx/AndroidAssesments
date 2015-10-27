@@ -1,4 +1,4 @@
-package com.example.patrick.hueapp;
+package com.example.patrick.hueapp.Control;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.patrick.hueapp.Model.HueLamp;
+import com.example.patrick.hueapp.R;
 
 import java.util.ArrayList;
 

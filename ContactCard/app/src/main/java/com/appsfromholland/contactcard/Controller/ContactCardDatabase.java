@@ -1,10 +1,12 @@
-package com.appsfromholland.contactcard;
+package com.appsfromholland.contactcard.Controller;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.appsfromholland.contactcard.Model.Person;
 
 /**
  * Created by Vincent on 4-10-2015.

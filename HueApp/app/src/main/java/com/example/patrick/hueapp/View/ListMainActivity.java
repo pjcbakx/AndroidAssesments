@@ -1,4 +1,4 @@
-package com.example.patrick.hueapp;
+package com.example.patrick.hueapp.View;
 
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,7 +12,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.example.patrick.hueapp.Control.LampAdapter;
+import com.example.patrick.hueapp.Control.LightReadTask;
+import com.example.patrick.hueapp.Control.LightSendTask;
+import com.example.patrick.hueapp.Model.HueLamp;
+import com.example.patrick.hueapp.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.appsfromholland.contactcard;
+package com.appsfromholland.contactcard.Model;
 
 import android.graphics.Bitmap;
 

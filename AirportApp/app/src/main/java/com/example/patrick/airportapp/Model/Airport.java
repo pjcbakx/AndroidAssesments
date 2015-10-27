@@ -1,4 +1,4 @@
-package com.example.patrick.airportapp;
+package com.example.patrick.airportapp.Model;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.example.patrick.airportapp;
+package com.example.patrick.airportapp.View;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,6 +13,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.example.patrick.airportapp.Control.AirportAdapter;
+import com.example.patrick.airportapp.Control.AirportsDatabase;
+import com.example.patrick.airportapp.Model.Airport;
+import com.example.patrick.airportapp.R;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private AirportAdapter airportCursorAdapter;
     private ListView airportListView;
     private Spinner countrySpinner;
-    private  AirportsDatabase adb;
+    private AirportsDatabase adb;
     private AirportAdapter adapter;
 
     ArrayList airportList;

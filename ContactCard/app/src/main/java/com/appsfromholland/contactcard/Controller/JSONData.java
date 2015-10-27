@@ -1,10 +1,11 @@
-package com.appsfromholland.contactcard;
+package com.appsfromholland.contactcard.Controller;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.util.Log;
 
+import com.appsfromholland.contactcard.Model.Person;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONArray;

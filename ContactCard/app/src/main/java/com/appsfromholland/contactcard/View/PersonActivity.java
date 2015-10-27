@@ -1,10 +1,12 @@
-package com.appsfromholland.contactcard;
+package com.appsfromholland.contactcard.View;
 
 import android.graphics.Bitmap;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.appsfromholland.contactcard.R;
 
 /**
  * Created by Vincent on 3-10-2015.

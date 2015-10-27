@@ -1,4 +1,4 @@
-package com.example.patrick.hueapp;
+package com.example.patrick.hueapp.Model;
 
 import java.io.Serializable;
 

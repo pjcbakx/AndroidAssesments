@@ -1,4 +1,4 @@
-package com.example.patrick.airportapp;
+package com.example.patrick.airportapp.Control;
 
 import android.content.Context;
 import android.database.Cursor;

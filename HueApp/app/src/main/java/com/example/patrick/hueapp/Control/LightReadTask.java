@@ -1,10 +1,10 @@
-package com.example.patrick.hueapp;
+package com.example.patrick.hueapp.Control;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.ViewDebug;
 
-import org.json.JSONArray;
+import com.example.patrick.hueapp.Model.HueLamp;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
