@@ -1,15 +1,15 @@
 package nl.avans.vincent.websocketsclient;
 
-import android.content.Intent;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements WebSocket.OnLightSocketListener {
     View rootView;
-    private static String TAG = "landscape";
     private static WebSocket webSocket;
 
     @Override
@@ -17,54 +17,44 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        addListenerOnButton();
-
-        //Makes new thread for the background and text
-        //Thread thread = new Thread(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        runOnMainThread();
-        //    }
-        //});
-        //thread.start();
-
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         rootView = findViewById(R.id.main_root);
 
-        webSocket = new WebSocket();
+        webSocket = new WebSocket(this);
         webSocket.connect();
 
+        orientation();
     }
 
-    /*
     @Override
     public void onColorReceived(int color) {
         rootView.setBackgroundColor(color);
     }
-    */
 
-    private void runOnMainThread() {
-        // Create handler for the Main Looper and execute code on Main Looper
-        //Handler handler = new android.os.Handler(Looper.getMainLooper());
-        //handler.post(runnable);
+    public void orientation() {
 
-       // WebSocketSingleton.setWebSocket(webSocket);
-       // Intent intent = new Intent(getApplicationContext(), OrientationActivity.class);
-       // startActivity(intent);
+        if (getRotation() == 0) {
+            TextView tvMessage = (TextView) findViewById(R.id.text_message);
+            tvMessage.setText("OK");
+
+            webSocket.getSocket().emit("potrait");
+        }
+        if (getRotation() == 3) {
+            TextView tvMessage = (TextView) findViewById(R.id.text_message);
+            tvMessage.setText("NIET OK!");
+
+            webSocket.getSocket().emit("landscape");
+        }
+
     }
 
+    public int getRotation() {
 
-    public void addListenerOnButton() {
-        final Button button = (Button) findViewById(R.id.pushButton);
+        Display display = ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int rotation = display.getRotation();
+        return rotation;
 
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                WebSocketSingleton.setWebSocket(webSocket);
-                Intent intent = new Intent(getApplicationContext(), OrientationActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
 }

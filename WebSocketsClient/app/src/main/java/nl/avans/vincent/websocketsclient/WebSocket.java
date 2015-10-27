@@ -29,14 +29,13 @@ import io.socket.emitter.Emitter;
 public class WebSocket {
     private static final String LOG_TAG = "WebSocket";
     private static final String BASE_URL = "http://192.168.0.14:3003";
-    //private static final String TAG = "";
 
     private Socket socket;
     private int color;
-    //private OnLightSocketListener listener;
+    private OnLightSocketListener listener;
 
-    public WebSocket() {
-      //  this.listener = listener;
+    public WebSocket(OnLightSocketListener listener) {
+        this.listener = listener;
         try {
             socket = IO.socket(BASE_URL);
         } catch (URISyntaxException e) {
@@ -84,14 +83,12 @@ public class WebSocket {
 
                 color = Color.argb(a, r, g, b);
 
-                /*
                 runOnMainThread(new Runnable() {
                     @Override
                     public void run() {
                         listener.onColorReceived(color);
                     }
                 });
-                */
 
             } catch (Exception e) {
                 Log.e(LOG_TAG, "Error getting result from JSON", e);
@@ -99,7 +96,6 @@ public class WebSocket {
         }
     }
 
-    /*
     private void runOnMainThread(Runnable runnable) {
         // Create handler for the Main Looper and execute code on Main Looper
         Handler handler = new android.os.Handler(Looper.getMainLooper());
@@ -109,5 +105,5 @@ public class WebSocket {
     interface OnLightSocketListener {
         void onColorReceived(int color);
     }
-    */
+
 }
