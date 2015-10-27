@@ -2,80 +2,46 @@ package nl.avans.vincent.websocketsclient;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
-import android.util.DisplayMetrics;
+import android.os.Bundle;
 import android.view.Display;
-import android.view.Surface;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 /**
- * Created by Vincent on 21-10-2015.
+ * Created by Vincent on 26-10-2015.
  */
 public class OrientationActivity extends Activity {
 
-    //public int getRotation(){
-     //   Display display = ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-     //   int rotation = display.getRotation();
-     //   return rotation;
-   // }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-    public int getScreenOrientation() {
-        int rotation = getWindowManager().getDefaultDisplay().getRotation();
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
-        int orientation;
-        // if the device's natural orientation is portrait:
-        if ((rotation == Surface.ROTATION_0
-                || rotation == Surface.ROTATION_180) && height > width ||
-                (rotation == Surface.ROTATION_90
-                        || rotation == Surface.ROTATION_270) && width > height) {
-            switch(rotation) {
-                case Surface.ROTATION_0:
-                    orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                    break;
-                case Surface.ROTATION_90:
-                    orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                    break;
-                case Surface.ROTATION_180:
-                    orientation =
-                            ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-                    break;
-                case Surface.ROTATION_270:
-                    orientation =
-                            ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-                    break;
-                default:
-                    orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                    break;
-            }
-        }
-        // if the device's natural orientation is landscape or if the device
-        // is square:
-        else {
-            switch(rotation) {
-                case Surface.ROTATION_0:
-                    orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                    break;
-                case Surface.ROTATION_90:
-                    orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                    break;
-                case Surface.ROTATION_180:
-                    orientation =
-                            ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-                    break;
-                case Surface.ROTATION_270:
-                    orientation =
-                            ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-                    break;
-                default:
-                    orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                    break;
-            }
-        }
+        if (getRotation() == 0) {
+            View rootView = findViewById(R.id.main_root);
+            rootView.setBackgroundColor(WebSocketSingleton.getWebSocket().getColor());
 
-        return orientation;
+            TextView tvMessage = (TextView) findViewById(R.id.text_message);
+            tvMessage.setText("OK");
+
+            WebSocketSingleton.getWebSocket().getSocket().emit("potrait");
+        }
+        if (getRotation() == 3) {
+            View rootView = findViewById(R.id.main_root);
+            rootView.setBackgroundColor(WebSocketSingleton.getWebSocket().getColor());
+
+            TextView tvMessage = (TextView) findViewById(R.id.text_message);
+            tvMessage.setText("NIET OK!");
+
+            WebSocketSingleton.getWebSocket().getSocket().emit("landscape");
+        }
+    }
+
+    public int getRotation() {
+        Display display = ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int rotation = display.getRotation();
+        return rotation;
     }
 
 }
