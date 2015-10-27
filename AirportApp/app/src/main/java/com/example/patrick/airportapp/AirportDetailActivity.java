@@ -45,23 +45,32 @@ public class AirportDetailActivity extends FragmentActivity {
         txtCountry.setText(airport.iso_country);
         txtMunicipality.setText(airport.municipality);
 
-        mMap.clear();
+        if(mMap != null)
+        {
+            mMap.clear();
 
-        LatLng positionAmsterdam = new LatLng(52.3086013794, 4.76388978958);
-        mMap.addMarker(new MarkerOptions().position(positionAmsterdam).title("Amsterdam"));
+
+            //Amsterdam cursor
+            String countryAmsterdam = "NL";
+            LatLng positionAmsterdam = new LatLng(52.3086013794, 4.76388978958);
+            mMap.addMarker(new MarkerOptions().position(positionAmsterdam).title("Amsterdam"));
 
 
-        LatLng position = new LatLng(airport.latitude, airport.longitude);
-        Log.i("Detail", "Lat:" + airport.latitude + " , Long:" + airport.longitude);
-        mMap.addMarker(new MarkerOptions().position(position).title(airport.name));
+            LatLng position = new LatLng(airport.latitude, airport.longitude);
+            Log.i("Detail", "Lat:" + airport.latitude + " , Long:" + airport.longitude);
+            mMap.addMarker(new MarkerOptions().position(position).title(airport.name));
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 6.0f));
+            if(airport.iso_country.equals(countryAmsterdam))
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 6.0f));
+            else
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
 
-        PolylineOptions route = new PolylineOptions();
-        route.add(positionAmsterdam);
-        route.add(position);
+            PolylineOptions route = new PolylineOptions();
+            route.add(positionAmsterdam);
+            route.add(position);
 
-        mMap.addPolyline(route);
+            mMap.addPolyline(route);
+        }
    }
 
     @Override
