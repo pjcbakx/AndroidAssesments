@@ -1,5 +1,6 @@
 package com.example.patrick.airportapp;
 
+import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.w3c.dom.Text;
+
 public class AirportDetailActivity extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
@@ -22,6 +25,7 @@ public class AirportDetailActivity extends FragmentActivity {
     private TextView txtElevation;
     private TextView txtCountry;
     private TextView txtMunicipality;
+    private TextView txtDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +38,7 @@ public class AirportDetailActivity extends FragmentActivity {
         txtElevation = (TextView) findViewById(R.id.txtElevation);
         txtCountry = (TextView) findViewById(R.id.txtCountry);
         txtMunicipality = (TextView) findViewById(R.id.txtMunicipality);
-
+        txtDistance = (TextView) findViewById(R.id.txtDistance);
 
         Bundle extras = getIntent().getExtras();
         airport = (Airport)extras.getSerializable("Airport");
@@ -70,6 +74,18 @@ public class AirportDetailActivity extends FragmentActivity {
             route.add(position);
 
             mMap.addPolyline(route);
+
+            //Distance
+            Location amsterdam = new Location("Amsterdam");
+            amsterdam.setLongitude(4.76388978958);
+            amsterdam.setLatitude(52.3086013794);
+
+            Location chosenLocation = new Location(airport.name);
+            chosenLocation.setLatitude(airport.latitude);
+            chosenLocation.setLongitude(airport.longitude);
+
+            int distance = (int)(amsterdam.distanceTo(chosenLocation)/1000);
+            txtDistance.setText(distance + " km");
         }
    }
 

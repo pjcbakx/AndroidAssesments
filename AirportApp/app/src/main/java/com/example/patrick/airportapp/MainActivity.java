@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         cursor.moveToFirst();
         Airport airport = new Airport();
 
+        //Get info of the first element in the cursor, this item is not read in the while loop
         airport.name = cursor.getString(cursor.getColumnIndex("name"));;
         airport.icao = cursor.getString(cursor.getColumnIndex("icao"));
         airport.longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
