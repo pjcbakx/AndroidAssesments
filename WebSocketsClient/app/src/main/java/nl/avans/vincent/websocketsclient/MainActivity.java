@@ -28,7 +28,9 @@ public class MainActivity extends AppCompatActivity implements WebSocket.OnLight
     }
 
     @Override
-    public void onColorReceived(int color) {
+    public void onColorReceived(int color, String text) {
+        TextView tvMessage = (TextView) findViewById(R.id.text_message);
+        tvMessage.setText(text);
         rootView.setBackgroundColor(color);
     }
 
@@ -36,13 +38,13 @@ public class MainActivity extends AppCompatActivity implements WebSocket.OnLight
 
         if (getRotation() == 0) {
             TextView tvMessage = (TextView) findViewById(R.id.text_message);
-            tvMessage.setText("OK");
+            //tvMessage.setText("OK");
 
             webSocket.getSocket().emit("potrait");
         }
         if (getRotation() == 1 || getRotation() == 3) {
             TextView tvMessage = (TextView) findViewById(R.id.text_message);
-            tvMessage.setText("NIET OK!");
+            //tvMessage.setText("NIET OK!");
 
             webSocket.getSocket().emit("landscape");
         }

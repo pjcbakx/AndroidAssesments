@@ -28,10 +28,11 @@ import io.socket.emitter.Emitter;
  */
 public class WebSocket {
     private static final String LOG_TAG = "WebSocket";
-    private static final String BASE_URL = "http://192.168.0.14:3003";
+    private static final String BASE_URL = "http://192.168.1.120:3003";
 
     private Socket socket;
     private int color;
+    private String value;
     private OnLightSocketListener listener;
 
     public WebSocket(OnLightSocketListener listener) {
@@ -78,11 +79,16 @@ public class WebSocket {
                 int a = response.getInt("a");
 
                 color = Color.argb(a, r, g, b);
+                value = "OK";
+                if(g == 0)
+                {
+                    value = "NIET OK";
+                }
 
                 runOnMainThread(new Runnable() {
                     @Override
                     public void run() {
-                        listener.onColorReceived(color);
+                        listener.onColorReceived(color, value);
                     }
                 });
 
@@ -98,7 +104,7 @@ public class WebSocket {
     }
 
     interface OnLightSocketListener {
-        void onColorReceived(int color);
+        void onColorReceived(int color, String text);
     }
 
 }
