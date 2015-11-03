@@ -14,12 +14,13 @@ https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend
 
 
     Patrick key: AIzaSyDDDXiVT3aPJVx1uf586car5_LrcXA4-VU
+    AIzaSyAU5dDKFY7bVP6iB6WX-ux8ChVp839Xxo4
     Vincent key: AIzaSyCyV_C89Hbjdk_wYC-XsaLkmG5VPy5KA4s
 
 
 
     -->
     <string name="google_maps_key" translatable="false" templateMergeStrategy="preserve">
-         AIzaSyCyV_C89Hbjdk_wYC-XsaLkmG5VPy5KA4s
+         AIzaSyAU5dDKFY7bVP6iB6WX-ux8ChVp839Xxo4
     </string>
 </resources>
